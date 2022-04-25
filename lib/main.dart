@@ -10,8 +10,16 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.greenAccent,
+          title: Text('BITCOIN CRYPTOCURRENCY',
+              style: TextStyle(
+                  color: Colors.black, fontWeight: FontWeight.bold)),
+        ),
+        body: HomePage(),
+      ),
     );
   }
 }
@@ -26,10 +34,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController textEditingController = TextEditingController();
 
-  Color mainColor = Colors.amber;
-  Color secondColor = Colors.red;
+  Color mainColor = Colors.black87;
+  Color secondColor = Colors.greenAccent;
 
-  String name = "", unit = "", desc="";
+  String name = "", unit = "", desc = "";
   double value = 0.0;
   var type, base, equal;
 
@@ -44,85 +52,113 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: secondColor,
-        body: SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    height: 400.0,
-                    width: 1000,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.0),
-                      color: mainColor,
-                    ),
-                    child: Column(children: [
-                      Expanded(
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text("Bitcoin Exchange Rate",
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              TextField(
-                                controller: textEditingController,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  labelText: "Input value to convert",
-                                  labelStyle: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16.0,
-                                    color: secondColor,
+        backgroundColor: mainColor,
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(),
+              child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(20.0),
+                      height: 400.0,
+                      width: 1000,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        color: secondColor,
+                      ),
+                      child: Column(children: [
+                        Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text("Bitcoin Exchange Rate",
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold)),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                TextField(
+                                  controller: textEditingController,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    labelText: "Input value to convert",
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 16.0,
+                                      color: mainColor,
+                                    ),
+                                  ),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                  keyboardType: TextInputType.number,
+                                ),
+                                DropdownButton(
+                                  itemHeight: 60,
+                                  value: selectCoin,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectCoin = newValue.toString();
+                                    });
+                                  },
+                                  items: coinList.map((selectCoin) {
+                                    return DropdownMenuItem(
+                                      child: Text(
+                                        selectCoin,
+                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                                      value: selectCoin,
+                                    );
+                                  }).toList(),
+                                ),
+                                ElevatedButton(
+                                    onPressed: _loadExchange,
+                                    child: const Text("Load Result")),
+                                SizedBox(height: 30.0),
+                                Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.all(16.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Result",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 24.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        desc,
+                                        style: TextStyle(
+                                          color: secondColor,
+                                          fontSize: 36.0,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                              ),
-                              DropdownButton(
-                                itemHeight: 60,
-                                value: selectCoin,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectCoin = newValue.toString();
-                                  });
-                                },
-                                items: coinList.map((selectCoin) {
-                                  return DropdownMenuItem(
-                                    child: Text(
-                                      selectCoin,
-                                    ),
-                                    value: selectCoin,
-                                  );
-                                }).toList(),
-                              ),
-                              ElevatedButton(
-                                  onPressed: _loadExchange,
-                                  child: const Text("Load Result")),
-                              Text(
-                                desc,
-                                style: const TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ]),
-                  ),
-                ))));
+                      ]),
+                    ),
+                  )))
+        ));
   }
 
   _loadExchange() async {
@@ -137,6 +173,8 @@ class _HomePageState extends State<HomePage> {
       cointype = "eth";
     } else if (selectCoin == "Litecoin") {
       cointype = "ltc";
+    } else if (selectCoin == "Bitcoin Cash") {
+      cointype = "bch";
     }
 
     if (rescode == 200) {
@@ -148,9 +186,8 @@ class _HomePageState extends State<HomePage> {
         type = parsedJson['rates']['$cointype']['type'];
 
         base = double.parse(textEditingController.text);
-        equal = base*value;
+        equal = (base * value).toStringAsFixed(2);
         desc = "$unit $equal";
-        
       });
     } else {
       throw Exception("Failed to connect to API");
