@@ -19,4 +19,20 @@ Future<List<String>> getExchangeRates() async{
     throw Exception("Failed to connect to API");
   }
 }
+
+/*Future<double> getValue(String from, String to) async {
+   http.Response res = await http.get(cryptoURL);
+   if(res.statusCode == 200){
+    var body = jsonDecode(res.body);
+    var money = body["rates"]["values"];
+
+  double rate = money;
+  print(rate);
+   return rate;
+  }else{
+    throw Exception("Failed to connect to API");
+  }
+}*/
+
 }
+

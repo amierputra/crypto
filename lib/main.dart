@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:crypto/widget/drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/services/api_client.dart';
@@ -24,20 +26,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   ApiClient client = ApiClient();
 
   Color mainColor = Colors.amber;
   Color secondColor = Colors.red;
-   List<String> crypto = [];
-   String from = "";
-   String to= "";
+  List<String> crypto = [];
+  String from = "";
+  String to = "";
 
-  late double rate;
+  late double rate = 0.0;
   String result = "";
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     (() async {
       List<String> list = await client.getExchangeRates();
@@ -99,13 +100,60 @@ class _HomePageState extends State<HomePage> {
                         height: 20.0,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           customDropDown(crypto, from, (val) {
                             setState(() {
                               from = val;
-                          });
-                          })
+                            });
+                          }),
+                          FloatingActionButton(
+                            onPressed: () {
+                              String temp = from;
+                              setState(() {
+                                from = to;
+                                to = temp;
+                              });
+                            },
+                            child: const Icon(Icons.swap_horiz),
+                            elevation: 0.0,
+                            backgroundColor: secondColor,
+                          ),
+                          customDropDown(crypto, to, (val) {
+                            setState(() {
+                              to = val;
+                            });
+                          }),
                         ],
+                      ),
+                      SizedBox(height: 50.0),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Result",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              result,
+                              style: TextStyle(
+                                color: secondColor,
+                                fontSize: 36.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
